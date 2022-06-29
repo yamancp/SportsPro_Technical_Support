@@ -1,0 +1,65 @@
+﻿@model SportsPro.Models.RegistrationViewModel
+@{
+   ViewBag.Title = "RegProduct";
+}
+
+
+@section validation {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
+
+@{ 
+    var session = new SportsPro.MySession(Context.Session);
+    var cust = session.GetCustomer();
+}
+
+<h2>Customer Name: @cust.FullName</h2>
+<h2>Registrations</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.CustomerProducts)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>
+                      
+                        <a asp-controller="Registration" asp-action="Delete"
+                           asp-route-id="@product.ProductID" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>
+
+<form asp-action="RegProduct" method="post">
+
+    
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    
+    <div class="form-group">
+        <label asp-for="@Model.Product.ProductID">Product</label>
+        <select asp-for="@Model.Product.ProductID"
+                asp-items="@(new SelectList(Model.Products, "ProductID", "Name", Model.Product.ProductID.ToString()))"
+                class="form-control">
+            <option value="">Please Select a Product</option>
+        </select>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Register</button>
+    <a asp-controller="Registration" asp-action="Index"
+       class="btn btn-outline-secondary">Cancel</a>
+</form>
+
+

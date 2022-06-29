@@ -1,0 +1,150 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> signInManager
+@{
+    var current = ViewContext.RouteData.Values["controller"]?.ToString() + "/" +
+        ViewContext.RouteData.Values["action"]?.ToString();
+}
+@RenderSection("validation", false)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   
+    <link rel="stylesheet" href="site.css" />
+  
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous"/>
+  
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<header>
+
+   
+    <nav class="navbar navbar-expand-md navbar-dark bg-secondary p-3">
+        <img runat="server" id="img_logo" src="~/Images/sportspro.png" />
+
+        <a class="navbar-brand ml-3" href="/"></a>
+
+        <button class="navbar-toggler" type="button"
+                data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+        <nav class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="navbar-nav mr-auto">
+
+                @if (User.IsInRole("Admin"))
+                {
+    <a class="nav-item nav-link
+                       @Nav.Active("Home/Index", current)" asp-controller="Home" asp-action="Index">Home</a>
+
+                    <a class="nav-item nav-link
+                       @Nav.Active("Product/Index", current)" asp-area="Admin" asp-controller="Product" asp-action="Index">Products</a>
+                                    <a class="nav-item nav-link
+                           @Nav.Active("Technician/Index", current)" asp-area="Admin" asp-controller="Technician" asp-action="Index">Technicians</a>
+                                                    <a class="nav-item nav-link
+                           @Nav.Active("Customer/Index", current)" asp-area="Admin" asp-controller="Customer" asp-action="Index">Customers</a>
+                                                                    <a class="nav-item nav-link
+                           @Nav.Active("Incident/Index", current)" asp-area="Admin" asp-controller="Incident" asp-action="Index">Incidents</a>
+                                                                                    <a class="nav-item nav-link
+                           @Nav.Active("Registration/Index", current)" asp-area="Admin" asp-controller="Registration" asp-action="Index">Registrations</a>
+                                                                                                    <a class="nav-item nav-link
+                       @Nav.Active("User/Index", current)" asp-area="Admin" asp-controller="User" asp-action="Index">Manage Users</a> }
+                                                                                                else if (User.IsInRole("Technician"))
+                                                                                                {
+                                                                                    <a class="nav-item nav-link
+                       @Nav.Active("Home/Index", current)" asp-controller="Home" asp-action="Index">Home</a>
+                                                                                                    <a class="nav-item nav-link
+                       @Nav.Active("Incident/Index", current)" asp-area="Admin" asp-controller="Incident" asp-action="Index">Incidents</a> }
+                                                                                                else
+                                                                                                {
+                                                                                    <a class="nav-item nav-link
+                       @Nav.Active("Home/Index", current)" asp-controller="Home" asp-action="Index">Home</a>
+                                                                                                    <a class="nav-item nav-link
+                       @Nav.Active("Home/About", current)" asp-controller="Home" asp-action="About">About</a>}
+
+
+            </div>
+            <div class="navbar-nav navbar-right" style="margin-left: 5px; margin-right: 500px">
+                <div class="navbar-nav ml-auto">
+                    @if (signInManager.IsSignedIn(User))
+                    {
+
+        <li class="nav-item">
+            <form method="post" asp-action="Logout" asp-controller="Account"
+                  asp-area="">
+                <input type="submit" value="Log Out"
+                       class="btn btn-outline-light  pull-right" />
+                <span class="text-light ">@User.Identity.Name</span>
+            </form>
+        </li> }
+    else
+    {
+
+        var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+
+    <li class="nav-item @Nav.Active("Account/Register", current)">
+        <a asp-action="Register" asp-controller="Account"
+           asp-area="" class="nav-link">Register</a>
+    </li>
+
+                    <li class="nav-item">
+                        <a asp-action="Login" asp-controller="Account"
+                           asp-area="" class="btn btn-outline-light">Log In</a>
+                    </li>}
+
+                    <a class="nav-item nav-link
+                       @Nav.Active("Home/About", current)" asp-controller="Home" asp-action="About">About</a>
+                </div>
+            </div>
+        </nav>
+    </nav>
+</header>
+
+<div class="container">
+    <main role="main" class="pb-5">
+        @if (TempData.Keys.Contains("msgAdd"))
+        {
+            <h4 class="alert alert-success text-center">
+                @TempData["msgAdd"]
+            </h4>
+        }
+        else if (TempData.Keys.Contains("msgDelete"))
+        {
+            <h4 class="alert alert-danger text-center">
+                @TempData["msgDelete"]
+            </h4>
+        }
+        else if (TempData.Keys.Contains("msgEdit"))
+        {
+            <h4 class="alert alert-info text-center">
+                @TempData["msgEdit"]
+            </h4>
+        }
+        else if (TempData.Keys.Contains("message"))
+        {
+            <h4 class="alert alert-info text-center">
+                @TempData["message"]
+            </h4>
+        }
+        else { }
+    </main>
+</div>
+<div class="container">
+    @RenderBody()
+</div>
+
+
+<footer class="border-top footer text-muted">
+    <div class="container">&copy; @DateTime.Now.Year - SportsPro</div>
+</footer>
+</html>

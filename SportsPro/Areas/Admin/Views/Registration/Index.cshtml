@@ -1,0 +1,34 @@
+﻿@model SportsPro.Models.RegistrationViewModel
+@{
+   ViewBag.Title = "Registration";
+}
+
+
+@section validation {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
+<h2>Get Customer</h2>
+
+<form asp-action="Index" method="post">
+
+    
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+   
+    <div class="form-group">
+        <label asp-for="@Model.Customer.CustomerID">Customer</label>
+        <select asp-for="@Model.Customer.CustomerID"
+                asp-items="@(new SelectList(Model.Customers, "CustomerID", "FullName", Model.Customer.CustomerID.ToString()))"
+                class="form-control">
+            <option>Please Select a Customer</option>
+        </select>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary" style="margin-left: 5px; margin-right: 5px">Select</button>
+    <a asp-controller="Registration" asp-action="Index"
+       class="btn btn-outline-secondary" style="margin-left: 5px; margin-right: 5px">Cancel</a>
+</form>

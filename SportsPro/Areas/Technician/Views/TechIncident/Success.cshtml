@@ -1,0 +1,50 @@
+﻿@model SportsPro.Models.IncidentListViewModel
+@{
+   ViewBag.Title = "Success";
+}
+
+
+@section validation {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
+<h2>Success</h2>
+@{ 
+    var session = new SportsPro.MySession(Context.Session);
+    var tech = session.GetTechnician();
+}
+
+<h2>@tech.Name</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Date Opened</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+      
+        @foreach (var incident in Model.Incidents)
+        {
+            <tr>
+                <td>@incident.Title</td>
+                <td>@incident.Customer.FullName</td>
+                <td>@incident.Product.Name</td>
+                <td>@incident.DateOpened.ToShortDateString()</td>
+                <td>
+                
+                    <a asp-controller="TechIncident" asp-action="Edit"
+                       asp-route-id="@incident.IncidentID" class="btn btn-outline-secondary">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-controller="TechIncident" asp-action="Index" class="btn btn-primary">Switch Technician</a>
+
+

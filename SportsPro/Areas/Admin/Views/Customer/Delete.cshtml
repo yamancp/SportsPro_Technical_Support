@@ -1,0 +1,19 @@
+﻿@model SportsPro.Models.Customer
+@{
+    ViewBag.Title = "Delete Customer";
+}
+
+<h2>Confirm Deletion</h2>
+<h3>@Model.FullName (@Model.City)</h3>
+
+<form asp-action="Delete" method="post">
+
+
+    <input type="hidden" asp-for="CustomerID" />
+    <input type="hidden" asp-for="FirstName" />
+    <input type="hidden" asp-for="LastName" />
+
+    <button type="submit" class="btn btn-outline-danger">Delete</button>
+    <a asp-controller="Customer" asp-action="Index"
+       class="btn btn-outline-primary">Cancel</a>
+</form>
